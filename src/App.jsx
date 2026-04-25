@@ -26,8 +26,17 @@ const algorithms = {
   counting: countingSort,
 };
 
-const DEFAULT_SIZE = 36;
+const DESKTOP_DEFAULT_SIZE = 36;
+const MOBILE_DEFAULT_SIZE = 24;
 const DEFAULT_SPEED = 58;
+
+function getInitialArraySize() {
+  if (typeof window !== 'undefined' && window.matchMedia('(max-width: 700px)').matches) {
+    return MOBILE_DEFAULT_SIZE;
+  }
+
+  return DESKTOP_DEFAULT_SIZE;
+}
 
 function createInitialMetrics(algorithmKey, size) {
   const info = algorithmInfo[algorithmKey];
@@ -44,17 +53,18 @@ function createInitialMetrics(algorithmKey, size) {
 }
 
 function App() {
+  const initialSize = useMemo(() => getInitialArraySize(), []);
   const [algorithmKey, setAlgorithmKey] = useState('bubble');
-  const [arraySize, setArraySize] = useState(DEFAULT_SIZE);
+  const [arraySize, setArraySize] = useState(initialSize);
   const [speed, setSpeed] = useState(DEFAULT_SPEED);
-  const [array, setArray] = useState(() => generateArray(DEFAULT_SIZE));
+  const [array, setArray] = useState(() => generateArray(initialSize));
   const [initialArray, setInitialArray] = useState(array);
   const [sortingState, setSortingState] = useState({
     compared: [],
     swapped: [],
     sorted: [],
   });
-  const [metrics, setMetrics] = useState(() => createInitialMetrics('bubble', DEFAULT_SIZE));
+  const [metrics, setMetrics] = useState(() => createInitialMetrics('bubble', initialSize));
   const [isSorting, setIsSorting] = useState(false);
   const arrayRef = useRef(array);
   const soundEngineRef = useRef(null);

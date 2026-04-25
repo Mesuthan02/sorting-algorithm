@@ -30,7 +30,7 @@ export function createSortingSoundEngine() {
 
   const context = new AudioContext();
   const masterGain = context.createGain();
-  masterGain.gain.value = 0.9;
+  masterGain.gain.value = 30;
   masterGain.connect(context.destination);
 
   return {
